@@ -7,16 +7,21 @@ const state = {
   },
   cardSprites: {
     avatar: document.getElementById("card-image"),
-    avatar: document.getElementById("card-name"),
-    avatar: document.getElementById("card-type"),
+    name: document.getElementById("card-name"),
+    type: document.getElementById("card-type"),
   },
   fieldCards: {
     player: document.getElementById("player-field-card"),
-    player: document.getElementById("computer-field-card"),
+    computer: document.getElementById("computer-field-card"),
   },
   actions: {
     button: document.getElementById("next-duel"),
   }
+};
+
+const playerSides = {
+  player1: "player-field-card",
+  computer: "computer-field-card",
 };
 
 const pathImages = ".src/assets/icons/";
@@ -49,6 +54,21 @@ const cardData = [
   },
 ];
 
-function init() {};
+async function drawCards(cardNumbers, fieldSide) {
+  // para cada número de cards passado
+  for(let i=0; i < cardNumbers; i++) {
+    // pega um id aleatório
+    const randomIdCard = await getRandomCardId();
+    // e traz a img correspondente ao id e o campo passado
+    const cardImage = await createCardImage(randomIdCard, fieldSide);
+    // após receber a img, a adiciona ao campo especificado
+    document.getElementById(fieldSide).appendChild(cardImage);
+  }
+}
+
+function init() {
+  drawCards(5, playerSides.player1);
+  drawCards(5, playerSides.computer);
+};
 
 init();
