@@ -62,6 +62,13 @@ async function getRandomCardId() {
   return cardData[randomIndex].id;
 };
 
+// acessa as informações guardadas no state e cardData para retornar as cartas de acordo com o index passado
+async function drawSelectCard(index) {
+  state.cardSprites.avatar.src = cardData[index].img;
+  state.cardSprites.name.innerText = cardData[index].name;
+  state.cardSprites.type.innerText = "Attribute: " + cardData[index].type;
+};
+
 async function createCardImage(cardId, fieldSide) {
   // cria o elemento img
   const cardImage = document.createElement("img");
@@ -73,19 +80,17 @@ async function createCardImage(cardId, fieldSide) {
   cardImage.classList.add("card");
 
   // se o campo passado for do player1
-  // obs.: é necessário fazer esse if, pois apenas o campo do player deve ser clicável
+  // obs.: é necessário fazer esse if, pois apenas o campo do player deve ser acessível
   if (fieldSide === playerSides.player1) {
+    // ao passar o mouse por cima da carta, ela é desenhada no lado esquerdo
+    cardImage.addEventListener("mouseover", () => {
+      drawSelectCard(cardId);
+    });
     // no evento de click, será gerado as cartas no campo
     cardImage.addEventListener("click", () => {
-      setCardsField(cardImage.getAttribute("data-id"));
+    setCardsField(cardImage.getAttribute("data-id"));
     });
   };
-
-  // ao passar o mouse por cima da carta, ela é desenhada no lado esquerdo
-  cardImage.addEventListener("mouseover", () => {
-    drawSelectedCard(cardId);
-  });
-
   // retorna a carta criada
   return cardImage;
 };
