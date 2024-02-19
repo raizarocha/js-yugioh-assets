@@ -69,6 +69,30 @@ async function drawSelectCard(index) {
   state.cardSprites.type.innerText = "Attribute: " + cardData[index].type;
 };
 
+async function setCardsField(cardId) {
+  // remove as cartas antes
+  await removeAllCardsId();
+
+  // sorteia carta aleatória para o computer
+  let computerCardId = await getRandomCardId();
+  
+  // adiciona style display-block para cada campo de cartas
+  state.fieldCards.player.style.display = "block";
+  state.fieldCards.computer.style.display = "block";
+
+  // seta as imagens das cartas
+  state.fieldCards.player.src = cardData[cardId].img;
+  state.fieldCards.computer.src = cardData[computerCardId].img;
+
+  // verifica quem ganha comparando os ids das cartas
+  let duelResults = await checkDuelsResults(cardId, computerCardId);
+
+  // atualiza pontuação
+  await updateScore();
+  // desenha botão de acordo com o resultado de duelResults
+  await drawButton(duelResults);
+};
+
 async function createCardImage(cardId, fieldSide) {
   // cria o elemento img
   const cardImage = document.createElement("img");
