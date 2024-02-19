@@ -14,15 +14,17 @@ const state = {
     player: document.getElementById("player-field-card"),
     computer: document.getElementById("computer-field-card"),
   },
+  playerSides: {
+    player1: "player-cards",
+    player1BOX: document.querySelector("#player-cards"),
+    computer: "computer-cards",
+    computerBOX: document.querySelector("#computer-cards"),
+  },
   actions: {
     button: document.getElementById("next-duel"),
-  }
+  },
 };
 
-const playerSides = {
-  player1: "player-cards",
-  computer: "computer-cards",
-};
 
 const pathImages = "./src/assets/icons/";
 
@@ -69,9 +71,22 @@ async function drawSelectCard(index) {
   state.cardSprites.type.innerText = "Attribute: " + cardData[index].type;
 };
 
+async function removeAllCardsImages() {
+  // recupera as cartas
+  let { computerBOX, player1BOX } = state.playerSides;
+  // recupera todos os elementos "img" que estejam dentro de computerBOX
+  let imgElements = computerBOX.querySelectorAll("img");
+  // e as remove
+  imgElements.forEach((img) => img.remove());
+
+  // remove as img de playerBOX
+  imgElements = player1BOX.querySelectorAll("img");
+  imgElements.forEach((img) => img.remove());
+}
+
 async function setCardsField(cardId) {
   // remove as cartas antes
-  await removeAllCardsId();
+  await removeAllCardsImages();
 
   // sorteia carta aleatória para o computer
   let computerCardId = await getRandomCardId();
@@ -105,7 +120,7 @@ async function createCardImage(cardId, fieldSide) {
 
   // se o campo passado for do player1
   // obs.: é necessário fazer esse if, pois apenas o campo do player deve ser acessível
-  if (fieldSide === playerSides.player1) {
+  if (fieldSide === state.playerSides.player1) {
     // ao passar o mouse por cima da carta, ela é desenhada no lado esquerdo
     cardImage.addEventListener("mouseover", () => {
       drawSelectCard(cardId);
@@ -133,8 +148,8 @@ async function drawCards(cardNumbers, fieldSide) {
 };
 
 function init() {
-  drawCards(5, playerSides.player1);
-  drawCards(5, playerSides.computer);
+  drawCards(5, state.playerSides.player1);
+  drawCards(5, state.playerSides.computer);
 };
 
 init();
