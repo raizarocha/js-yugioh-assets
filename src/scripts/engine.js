@@ -77,13 +77,11 @@ async function checkDuelsResults(playerCardId, computerCardId) {
 
   if (playerCard.WinOf.includes(computerCardId)) {
     duelResults = "WIN";
-    // await playAudio(duelResults);
     state.score.playerScore++;
   };
 
   if (playerCard.LoseOf.includes(computerCardId)) {
     duelResults = "LOSE";
-    // await playAudio(duelResults);
     state.score.computerScore++;
   };
 
@@ -113,12 +111,13 @@ async function setCardsField(cardId) {
   let computerCardId = await getRandomCardId();
   
   // adiciona style display-block para cada campo de cartas
-  state.fieldCards.player.style.display = "block";
-  state.fieldCards.computer.style.display = "block";
+  await showHideCardFieldsImages(true);
+
+  // reseta as informações da carta após o resultado do duelo
+  await hiddenCardDetails();
 
   // seta as imagens das cartas
-  state.fieldCards.player.src = cardData[cardId].img;
-  state.fieldCards.computer.src = cardData[computerCardId].img;
+  await drawCardsInFields(cardId, computerCardId)
 
   // verifica quem ganha comparando os ids das cartas
   let duelResults = await checkDuelsResults(cardId, computerCardId);
@@ -128,6 +127,27 @@ async function setCardsField(cardId) {
 
   // desenha botão de acordo com o resultado de duelResults
   await drawButton(duelResults);
+};
+
+async function drawCardsInFields(cardId, computerCardId) {
+  state.fieldCards.player.src = cardData[cardId].img;
+  state.fieldCards.computer.src = cardData[computerCardId].img;
+};
+
+async function showHideCardFieldsImages(value) {
+  if (value === true) {
+    state.fieldCards.player.style.display = "block";
+    state.fieldCards.computer.style.display = "block";
+  } else {
+    state.fieldCards.player.style.display = "none";
+    state.fieldCards.computer.style.display = "none";
+  };
+};
+
+async function hiddenCardDetails() {
+  state.cardSprites.avatar.src = "";
+  state.cardSprites.name.innerText = "Selecione uma carta";
+  state.cardSprites.type.innerText = "";
 };
 
 // atualiza visualmente o botão
@@ -152,7 +172,6 @@ async function createCardImage(cardId, fieldSide) {
   cardImage.classList.add("card");
 
   // se o campo passado for do player1
-  // obs.: é necessário fazer esse if, pois apenas o campo do player deve ser acessível
   if (fieldSide === state.playerSides.player1) {
     // ao passar o mouse por cima da carta, ela é desenhada no lado esquerdo
     cardImage.addEventListener("mouseover", () => {
@@ -162,6 +181,7 @@ async function createCardImage(cardId, fieldSide) {
     cardImage.addEventListener("click", () => {
     setCardsField(cardImage.getAttribute("data-id"));
     });
+    // obs.: é necessário fazer esse if, pois apenas o campo do player deve ser acessível
   };
   // retorna a carta criada
   return cardImage;
@@ -196,6 +216,9 @@ async function playAudio(status) {
 };
 
 function init() {
+  // resolve problema de borda dupla ao resetar
+  showHideCardFieldsImages(false);  
+
   drawCards(5, state.playerSides.player1);
   drawCards(5, state.playerSides.computer);
 };

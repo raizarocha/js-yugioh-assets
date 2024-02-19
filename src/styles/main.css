@@ -119,6 +119,7 @@
 .card-infield {
   height: 11.2rem;
   width: 8rem;
+  border: 1px solid #fff;
   border-radius: 8px;
 }
 
@@ -130,7 +131,3 @@
 .card:hover {
   transform: scale(1.2);
 }
-
-/* .debug {
-  border: 1px solid red;
-} */
