@@ -71,6 +71,23 @@ async function drawSelectCard(index) {
   state.cardSprites.type.innerText = "Attribute: " + cardData[index].type;
 };
 
+async function checkDuelsResults(playerCardId, computerCardId) {
+  let duelResults = "Empate";
+  let playerCard = cardData[playerCardId];
+
+  if (playerCard.WinOf.includes(computerCardId)) {
+    duelResults = "Ganhou";
+    state.score.playerScore++;
+  };
+
+  if (playerCard.LoseOf.includes(computerCardId)) {
+    duelResults = "Perdeu";
+    state.score.computerScore++;
+  };
+
+  return duelResults;
+}
+
 async function removeAllCardsImages() {
   // recupera as cartas
   let { computerBOX, player1BOX } = state.playerSides;
@@ -82,7 +99,7 @@ async function removeAllCardsImages() {
   // remove as img de playerBOX
   imgElements = player1BOX.querySelectorAll("img");
   imgElements.forEach((img) => img.remove());
-}
+};
 
 async function setCardsField(cardId) {
   // remove as cartas antes
@@ -104,8 +121,20 @@ async function setCardsField(cardId) {
 
   // atualiza pontuação
   await updateScore();
+
   // desenha botão de acordo com o resultado de duelResults
   await drawButton(duelResults);
+};
+
+// atualiza visualmente o botão
+async function drawButton(text) {
+  state.actions.button.innerText = text;
+  state.actions.button.style.display = "block";
+};
+
+// atualiza visualmente o score
+async function updateScore() {
+  state.score.scoreBox.innerText = `Win: ${state.score.playerScore} | Lose: ${state.score.computerScore}`;
 };
 
 async function createCardImage(cardId, fieldSide) {
@@ -145,6 +174,16 @@ async function drawCards(cardNumbers, fieldSide) {
     // após receber a img, a adiciona ao campo especificado
     document.getElementById(fieldSide).appendChild(cardImage);
   };
+};
+
+async function resetDuel() {
+  state.cardSprites.avatar.src = "";
+  state.actions.button.style.display = "none";
+  
+  state.fieldCards.player.style.display = "none";
+  state.fieldCards.computer.style.display = "none";
+
+  init();
 };
 
 function init() {
