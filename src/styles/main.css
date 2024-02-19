@@ -116,7 +116,7 @@ button, a, img:hover, button:hover, a:hover {
 }
 
 .card-box {
-  height: 9rem;
+  height: 15rem;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -133,6 +133,7 @@ button, a, img:hover, button:hover, a:hover {
 
 .card {
   transition: transform 0.2s;
+  height: 10rem;
 }
 
 /* aplica efeito de zoom nas cartas */
