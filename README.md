@@ -1,5 +1,5 @@
 
-# Projeto Yu-Gi-Oh Jo-Ken-Po Edition
+# Projeto Yu-Gi-Oh! Jo-Ken-Po Edition
 
 Neste repositório você encontrará um projeto baseado em um jogo de duelo de cartas Yu-Gi-Oh, utilizando as regras do jo-ken-po. E teve como objetivo colocar em prática conceitos de lógica de programação aplicada a jogos, CSS e HTML. 
 
